@@ -1,6 +1,14 @@
-# Compiled files
+.env
+*.swp
+*.swo
+*.box
+*.retry
+
+# Packer
+packer_cache
+manifest.json
+
+# Terraform
 *.tfstate
 *.tfstate.backup
-
-# Module directory
 .terraform/

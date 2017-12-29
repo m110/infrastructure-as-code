@@ -1,0 +1,9 @@
+#!/bin/bash
+
+if [ -z "$DUMMY_SERVER_PORT" ]; then
+    echo "DUMMY_SERVER_PORT variable missing"
+    exit 1
+fi
+
+echo "Dummy server starting on $DUMMY_SERVER_PORT"
+python -m SimpleHTTPServer $DUMMY_SERVER_PORT

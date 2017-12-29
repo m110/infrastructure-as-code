@@ -44,6 +44,17 @@ Terraform will be responsible for creating the infrastructure for chosen provide
 
 There should be one file per environment for all required variables.
 
+## Target infrastructures
+
+The complete example should alllow easy deploy of the dummy http server to:
+
+    * AWS EC2
+    * Google Cloud Platform CE
+    * Docker containers
+    * KVM virtual machines
+
+There should be also available [Vagrant](https://vagrantup.com/) box consistent with other images.
+
 # Resources
 
 * https://blog.gruntwork.io/a-comprehensive-guide-to-terraform-b3d32832baca
