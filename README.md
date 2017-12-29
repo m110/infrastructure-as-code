@@ -48,12 +48,22 @@ There should be one file per environment for all required variables.
 
 The complete example should alllow easy deploy of the dummy http server to:
 
-    * AWS EC2
-    * Google Cloud Platform CE
-    * Docker containers
-    * KVM virtual machines
+* AWS EC2
+* Google Cloud Platform CE
+* Docker containers
+* KVM virtual machines
 
-There should be also available [Vagrant](https://vagrantup.com/) box consistent with other images.
+There should be also available [Vagrant](https://vagrantup.com/) box based on Virtualbox.
+
+### Will the images be consistent?
+
+You can get very close by using the same base images, since all of them will be provisioned by the same ansible playbook. There will always be some differences, but for most use cases, this should be good enough.
+
+### Why would I use Vagrant instead of docker?
+
+Most of the time - you wouldn't. Docker containers will make perfect development environments for most cases, but sometimes you might need even more consistency on local machine, for example down to the kernel version. VMs can help you achieve this.
+
+It may also make sense to use both of them. Maybe your team needs to run some tests on "real" VMs, while another team's software uses your API and lightweight docker containers will be just enough for them for local development. As always, decide what's best for your use case.
 
 # Resources
 
