@@ -1,9 +1,28 @@
-#!/bin/bash
+#!/usr/bin/python
+import os
+import sys
+import socket
+from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 
-if [ -z "$DUMMY_SERVER_PORT" ]; then
-    echo "DUMMY_SERVER_PORT variable missing"
-    exit 1
-fi
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.send_header('Content-type', 'text/html')
+        self.end_headers()
+        self.wfile.write("Hello from {}!".format(socket.gethostname()))
 
-echo "Dummy server starting on $DUMMY_SERVER_PORT"
-python -m SimpleHTTPServer $DUMMY_SERVER_PORT
+def main():
+    port = os.getenv("DUMMY_SERVER_PORT")
+    if not port:
+        print("Set DUMMY_SERVER_PORT env. variable")
+        return 1
+
+    port = int(port)
+    print("Starting dummy http server on :{}".format(port))
+
+    server = HTTPServer(('', port), DummyHandler)
+    server.serve_forever()
+    return 0
+
+if __name__ == "__main__":
+    sys.exit(main())
