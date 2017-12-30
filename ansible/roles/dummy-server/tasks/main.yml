@@ -1,0 +1,14 @@
+---
+- name: Upload dummy-server
+  become: "{{ dummy.become }}"
+  copy: src=../dummy-server/dummy-server dest=/usr/local/bin/dummy-server mode=0755
+
+- name: Upload systemd service
+  become: "{{ dummy.become }}"
+  template: src=dummy-server.service.j2 dest=/etc/systemd/system/dummy-server.service
+  when: dummy.systemd
+
+- name: Enable service
+  become: "{{ dummy.become }}"
+  service: name=dummy-server enabled=yes
+  when: dummy.systemd

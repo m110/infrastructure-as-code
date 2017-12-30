@@ -1,0 +1,13 @@
+[Unit]
+Description=A dummy HTTP server
+
+[Service]
+ExecStart=/usr/local/bin/dummy-server
+EnvironmentFile=/etc/dummy-server.env
+
+User={{ dummy.user }}
+Group={{ dummy.group }}
+WorkingDirectory={{ dummy.home }}
+
+[Install]
+WantedBy=multi-user.target

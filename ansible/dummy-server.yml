@@ -1,0 +1,6 @@
+---
+- hosts: dummy
+  vars_files:
+    - ../vars.json
+  roles:
+    - dummy-server

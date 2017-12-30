@@ -1,0 +1,8 @@
+---
+dummy:
+  port: 80
+  systemd: true
+  user: www-data
+  group: www-data
+  home: /tmp
+  become: yes
