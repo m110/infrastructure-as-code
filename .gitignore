@@ -7,6 +7,7 @@
 # Packer
 packer_cache
 manifest.json
+output-*
 
 # Terraform
 *.tfstate

@@ -3,6 +3,10 @@
   become: "{{ dummy.become }}"
   copy: src=../dummy-server/dummy-server dest=/usr/local/bin/dummy-server mode=0755
 
+- name: Upload default variables
+  become: "{{ dummy.become }}"
+  template: src=dummy-server.j2 dest=/etc/default/dummy-server
+
 - name: Upload systemd service
   become: "{{ dummy.become }}"
   template: src=dummy-server.service.j2 dest=/etc/systemd/system/dummy-server.service

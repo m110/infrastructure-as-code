@@ -3,7 +3,7 @@ Description=A dummy HTTP server
 
 [Service]
 ExecStart=/usr/local/bin/dummy-server
-EnvironmentFile=/etc/dummy-server.env
+EnvironmentFile=/etc/default/dummy-server
 
 User={{ dummy.user }}
 Group={{ dummy.group }}

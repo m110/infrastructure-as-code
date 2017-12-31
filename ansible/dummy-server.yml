@@ -1,5 +1,5 @@
 ---
-- hosts: dummy
+- hosts: default
   vars_files:
     - ../vars.json
   roles:
