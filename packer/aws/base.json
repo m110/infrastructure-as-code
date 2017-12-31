@@ -1,0 +1,37 @@
+{
+    "builders": [
+        {
+            "type": "amazon-ebs",
+            "access_key": "{{ user `aws_access_key` }}",
+            "secret_key": "{{ user `aws_secret_key` }}",
+            "region": "{{ user `aws_region` }}",
+            "instance_type": "t2.micro",
+            "ami_name": "dummy-base-{{ timestamp }}",
+            "source_ami": "{{ user `aws_source_ami` }}",
+            "ssh_username": "ubuntu"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "../scripts/python.sh",
+                "../scripts/apt-cleanup.sh"
+            ],
+            "execute_command": "sudo sh -c '{{ .Vars }} {{ .Path }}'"
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "base-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "aws_access_key": null,
+        "aws_secret_key": null,
+        "aws_region": null,
+        "aws_source_ami": null
+    }
+}

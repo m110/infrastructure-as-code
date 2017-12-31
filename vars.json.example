@@ -1,6 +1,12 @@
 {
     "dummy_server_port": "8080",
 
+    "aws_access_key": "",
+    "aws_secret_key": "",
+    "aws_region": "eu-central-1",
+    "aws_source_ami": "ami-df8406b0",
+    "aws_key_name": "any-key",
+
     "docker_host": "tcp://127.0.0.1",
     "docker_registry_url": "localhost"
 }
