@@ -1,0 +1,46 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "{{ user `docker_registry_url` }}/dummy-base:0.1",
+            "commit": true,
+            "changes": [
+                "EXPOSE {{ user `dummy_server_port` }}",
+                "ENV DUMMY_SERVER_PORT {{ user `dummy_server_port` }}",
+                "CMD /usr/local/bin/dummy-server"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "ansible",
+            "playbook_file": "{{ template_dir }}/../../ansible/dummy-server.yml",
+            "ansible_env_vars": ["ANSIBLE_CONFIG={{ template_dir }}/../../ansible/ansible.cfg"],
+            "extra_arguments": [
+                "--extra-vars", "{'dummy': {'systemd': false, 'port': {{ user `dummy_server_port` }}, 'become': false}}",
+                "--diff"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "docker-tag",
+                "repository": "{{ user `docker_registry_url` }}/dummy-server",
+                "tag": "0.1"
+            },
+            {
+                "type": "docker-push"
+            }
+        ],
+        {
+            "type": "manifest",
+            "output": "main-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "dummy_server_port": null,
+        "docker_registry_url": null
+    }
+}

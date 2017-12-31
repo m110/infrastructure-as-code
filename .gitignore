@@ -1,4 +1,5 @@
 .env
+vars.json
 *.swp
 *.swo
 *.box
@@ -7,6 +8,7 @@
 # Packer
 packer_cache
 manifest.json
+*-manifest.json
 output-*
 
 # Terraform

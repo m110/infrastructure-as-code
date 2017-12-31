@@ -1,0 +1,38 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "ubuntu:16.04",
+            "commit": true
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "../scripts/python.sh",
+                "../scripts/apt-cleanup.sh"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "docker-tag",
+                "repository": "{{ user `docker_registry_url` }}/dummy-base",
+                "tag": "0.1"
+            },
+            {
+                "type": "docker-push"
+            }
+        ],
+        {
+            "type": "manifest",
+            "output": "base-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "docker_registry_url": null
+    }
+}
