@@ -1,5 +1,6 @@
 {
     "dummy_server_port": "8080",
 
+    "docker_host": "tcp://127.0.0.1",
     "docker_registry_url": "localhost"
 }
