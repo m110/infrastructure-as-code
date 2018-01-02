@@ -2,6 +2,8 @@
 
 This project aims to be a complete (although simple) infrastructure as code solution.
 
+**[WIP] Note that this is still work in progress.**
+
 ## Goals
 
 ### Infrastructure as a code
@@ -42,7 +44,13 @@ Terraform will be responsible for creating the infrastructure for chosen provide
 
 ## Variables
 
-There should be one file per environment for all required variables.
+The basic idea is that there should be one file with variables that will be imported by all tools (vars.json).
+
+I've decided to stick with JSON for now, as Packer doesn't support reading HCL at the moment. This JSON file can be imported by both packer and terraform on start.
+
+While ansible could also include vars this way, I feel that its variable precedence rules are already complex enough, so for now I'm sticking with overriding defaults by `--extra-vars`.
+
+In the end, there should be one file per environment for all required variables.
 
 ## Target infrastructures
 
