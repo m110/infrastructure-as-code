@@ -2,10 +2,6 @@
 - name: Install nginx
   apt: name=nginx state=present
 
-- name: Start and enable nginx service
-  service: name=nginx state=started enabled=yes
-  when: nginx.systemd
-
 - name: Remove default sites
   file: path={{ item }} state=absent
   with_items:
@@ -24,19 +20,6 @@
   tags:
     - nginx-config
 
-- name: upload backends
-  copy: src=backends dest=/etc/nginx/conf.d/backends
-  notify: restart nginx
-  tags:
-    - nginx-config
-
-
-#- name: Link enabled sites
-#  file:
-#    src: /etc/nginx/sites-available/{{ item }}.conf
-#    dest: /etc/nginx/sites-enabled/{{ item }}.conf
-#    state: link
-#  with_items: "{{ nginx.sites }}"
-#  notify: restart nginx
-#  tags:
-#    - nginx-config
+- name: Start and enable nginx service
+  service: name=nginx state=started enabled=yes
+  when: nginx.systemd
