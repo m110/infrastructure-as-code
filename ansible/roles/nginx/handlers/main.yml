@@ -1,4 +1,5 @@
 ---
 - name: restart nginx
+  become: "{{ nginx.become }}"
   service: name=nginx state=restarted
   when: nginx.systemd

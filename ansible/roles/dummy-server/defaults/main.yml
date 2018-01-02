@@ -5,4 +5,4 @@ dummy:
   user: www-data
   group: www-data
   home: /tmp
-  become: yes
+  become: true

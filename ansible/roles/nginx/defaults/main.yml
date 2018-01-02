@@ -1,4 +1,5 @@
 ---
 nginx:
-  sites: []
+  become: true
   systemd: true
+  sites: []
