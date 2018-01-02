@@ -10,8 +10,8 @@
         {
             "type": "shell",
             "scripts": [
-                "../scripts/python.sh",
-                "../scripts/apt-cleanup.sh"
+                "{{ template_dir }}/../scripts/python.sh",
+                "{{ template_dir }}/../scripts/apt-cleanup.sh"
             ]
         }
     ],
