@@ -5,6 +5,8 @@ vars.json
 *.box
 *.retry
 
+dummy-server/dummy-server
+
 # Packer
 packer_cache
 manifest.json
