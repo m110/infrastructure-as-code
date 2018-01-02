@@ -8,5 +8,7 @@
     "aws_key_name": "any-key",
 
     "docker_host": "tcp://127.0.0.1",
-    "docker_registry_url": "localhost"
+    "docker_registry_url": "localhost",
+
+    "libvirt_uri": "qemu://system"
 }
