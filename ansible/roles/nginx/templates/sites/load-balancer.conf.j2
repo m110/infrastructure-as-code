@@ -1,0 +1,10 @@
+upstream backend {
+    include /etc/nginx/conf.d/backends;
+}
+
+server {
+    listen 80;
+    location / {
+        proxy_pass http://backend;
+    }
+}

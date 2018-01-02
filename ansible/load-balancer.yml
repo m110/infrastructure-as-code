@@ -1,0 +1,10 @@
+---
+- hosts: default
+  roles:
+    - name: nginx
+      tags:
+        - nginx
+  vars:
+    nginx:
+      sites:
+        - load-balancer

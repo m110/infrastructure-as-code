@@ -1,0 +1,51 @@
+{
+    "builders": [
+        {
+            "type": "docker",
+            "image": "nginx:1.13.8",
+            "commit": true,
+            "changes": [
+                "ENTRYPOINT [\"nginx\"]",
+                "CMD [\"-g\", \"daemon off;\"]"
+            ]
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "{{ template_dir }}/../scripts/python.sh",
+                "{{ template_dir }}/../scripts/apt-cleanup.sh"
+            ]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "{{ template_dir }}/../../ansible/load-balancer.yml",
+            "ansible_env_vars": ["ANSIBLE_CONFIG={{ template_dir }}/../../ansible/ansible.cfg"],
+            "extra_arguments": [
+                "--extra-vars", "{'nginx': {'become': false, 'systemd': false}}",
+                "--diff", "--tags", "nginx-config"
+            ]
+        }
+    ],
+    "post-processors": [
+        [
+            {
+                "type": "docker-tag",
+                "repository": "{{ user `docker_registry_url` }}/dummy-lbc",
+                "tag": "0.1"
+            },
+            {
+                "type": "docker-push"
+            }
+        ],
+        {
+            "type": "manifest",
+            "output": "lbc-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "docker_registry_url": null
+    }
+}

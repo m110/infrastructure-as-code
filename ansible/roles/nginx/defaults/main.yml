@@ -1,0 +1,6 @@
+---
+nginx:
+  sites: []
+  systemd: true
+  load_balancer_backends:
+    - 127.0.0.1

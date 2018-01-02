@@ -1,4 +1,6 @@
 ---
 - hosts: default
   roles:
-    - dummy-server
+    - name: dummy-server
+      tags:
+        - dummy-server
