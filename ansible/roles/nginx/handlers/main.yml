@@ -3,3 +3,7 @@
   become: "{{ nginx.become }}"
   service: name=nginx state=restarted
   when: nginx.systemd
+
+- name: reload nginx
+  become: "{{ nginx.become }}"
+  shell: nginx -s reload

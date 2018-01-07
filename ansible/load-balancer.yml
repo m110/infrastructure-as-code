@@ -1,5 +1,5 @@
 ---
-- hosts: default
+- hosts: "{{ host | default('default') }}"
   roles:
     - name: nginx
       tags:

@@ -1,0 +1,3 @@
+{% for backend in nginx.backends %}
+server {{ backend }};
+{% endfor %}

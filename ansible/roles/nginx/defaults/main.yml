@@ -3,3 +3,5 @@ nginx:
   become: true
   systemd: true
   sites: []
+  backends:
+    - 127.0.0.1
