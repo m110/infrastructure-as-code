@@ -8,7 +8,6 @@
                 "{{ user `iso_url` }}"
             ],
             "disk_image": true,
-            "disk_compression": true,
             "iso_checksum_url": "{{ user `iso_checksum_url` }}",
             "iso_checksum_type": "none",
             "output_directory": "output-{{ user `vm_name` }}",
@@ -26,10 +25,10 @@
     "provisioners": [
         {
             "type": "ansible",
-            "playbook_file": "{{ template_dir }}/../../ansible/dummy-server.yml",
+            "playbook_file": "{{ template_dir }}/../../ansible/load-balancer.yml",
             "ansible_env_vars": ["ANSIBLE_CONFIG={{ template_dir }}/../../ansible/ansible.cfg"],
             "extra_arguments": [
-                "--extra-vars", "{'ansible_become_pass': {{ user `ssh_password` }}, 'nginx': {'systemd': false, 'become': true}, 'dummy': {'systemd': true, 'port': {{ user `dummy_server_port` }}, 'become': true}}",
+                "--extra-vars", "{'ansible_become_pass': {{ user `ssh_password` }}, 'nginx': {'systemd': false, 'become': true}}",
                 "--diff"
             ]
         }
@@ -42,14 +41,13 @@
         }
     ],
     "variables": {
-        "dummy_server_port": null,
         "cpus": "1",
         "disk_size": "65536",
         "headless": "",
         "memory": "512",
         "ssh_password": "ubuntu",
         "ssh_username": "ubuntu",
-        "vm_name": "ubuntu-main",
+        "vm_name": "ubuntu-lbc",
         "iso_checksum_url": "file://output-ubuntu-base/ubuntu-base_sha256.checksum",
         "iso_url": "./output-ubuntu-base/ubuntu-base"
     }

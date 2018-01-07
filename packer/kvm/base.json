@@ -19,6 +19,7 @@
                 "initrd=/install/initrd.gz -- <enter>"
             ],
             "disk_size": "{{ user `disk_size` }}",
+            "disk_compression": true,
             "floppy_files": [
                 "http/{{ user `preseed` }}"
             ],
