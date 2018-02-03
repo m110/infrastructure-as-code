@@ -11,6 +11,10 @@ resource "null_resource" "lbc_floating_ip" {
     host = "${element(hcloud_server.lbc.*.ipv4_address, count.index)}"
   }
 
+  provisioner "local-exec" {
+    command = "ssh-keyscan ${element(hcloud_server.lbc.*.ipv4_address, count.index)} >> ~/.ssh/known_hosts"
+  }
+
   provisioner "file" {
     content     = "${data.template_file.floating_ip.rendered}"
     destination = "/etc/network/interfaces.d/100-floating-ip.cfg"
@@ -27,7 +31,12 @@ resource "null_resource" "backends" {
   count = "${hcloud_server.lbc.count}"
 
   triggers {
-    backends_ips = "${join(",", hcloud_server.node.*.ipv4_address)}"
+    backends_ips  = "${join(",", hcloud_server.node.*.ipv4_address)}"
+    lbc_addresses = "${join(", ", hcloud_server.lbc.*.ipv4_address)}"
+  }
+
+  provisioner "local-exec" {
+    command = "ssh-keyscan ${element(hcloud_server.lbc.*.ipv4_address, count.index)} >> ~/.ssh/known_hosts"
   }
 
   provisioner "local-exec" {

@@ -6,5 +6,6 @@ server {
     listen 80;
     location / {
         proxy_pass http://backend;
+        add_header lbc-host $hostname;
     }
 }
