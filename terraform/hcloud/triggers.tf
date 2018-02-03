@@ -2,7 +2,6 @@ resource "null_resource" "lbc_floating_ip" {
   count = "${hcloud_server.lbc.count}"
 
   triggers {
-    x             = 2
     floating_ip   = "${hcloud_floating_ip.lbc_floating_ip.ip_address}"
     lbc_addresses = "${join(", ", hcloud_server.lbc.*.ipv4_address)}"
   }
