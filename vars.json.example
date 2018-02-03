@@ -12,6 +12,9 @@
 
     "hcloud_token": "",
     "hcloud_base_image": "",
+    "hcloud_node_image": "",
+    "hcloud_lbc_image": "",
+    "hcloud_ssh_key": "",
 
     "libvirt_uri": "qemu://system",
     "libvirt_bastion_host": "127.0.0.1",
