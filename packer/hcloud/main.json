@@ -4,7 +4,7 @@
             "type": "hcloud",
             "token": "{{ user `hcloud_token` }}",
             "server_type": "cx11",
-            "source_image": "{{ user `base_image` }}",
+            "source_image": "{{ user `hcloud_base_image` }}",
             "image_name": "main-image",
             "ssh_username": "root"
         }
