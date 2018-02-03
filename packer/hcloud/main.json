@@ -1,0 +1,42 @@
+{
+    "builders": [
+        {
+            "type": "hcloud",
+            "token": "{{ user `hcloud_token` }}",
+            "server_type": "cx11",
+            "source_image": "{{ user `base_image` }}",
+            "image_name": "main-image",
+            "ssh_username": "root"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "{{ template_dir }}/../scripts/python.sh",
+                "{{ template_dir }}/../scripts/apt-cleanup.sh"
+            ]
+        },
+        {
+            "type": "ansible",
+            "playbook_file": "{{ template_dir }}/../../ansible/dummy-server.yml",
+            "ansible_env_vars": ["ANSIBLE_CONFIG={{ template_dir }}/../../ansible/ansible.cfg"],
+            "extra_arguments": [
+                "--extra-vars", "{'dummy': {'systemd': true, 'port': {{ user `dummy_server_port` }}, 'become': false}, 'ansible_connection': 'paramiko'}",
+                "--diff"
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "base-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "hcloud_token": null,
+        "hcloud_base_image": null,
+        "dummy_server_port": null
+    }
+}

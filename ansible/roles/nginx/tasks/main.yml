@@ -31,6 +31,7 @@
   notify: reload nginx
   tags:
     - nginx-config
+    - nginx-config-backends
 
 - name: Start and enable nginx service
   become: "{{ nginx.become }}"

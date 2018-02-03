@@ -10,6 +10,9 @@
     "docker_host": "tcp://127.0.0.1",
     "docker_registry_url": "localhost",
 
+    "hcloud_token": "",
+    "hcloud_base_image": "",
+
     "libvirt_uri": "qemu://system",
     "libvirt_bastion_host": "127.0.0.1",
     "libvirt_bastion_user": "root",

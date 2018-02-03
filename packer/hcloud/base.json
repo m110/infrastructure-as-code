@@ -1,0 +1,31 @@
+{
+    "builders": [
+        {
+            "type": "hcloud",
+            "token": "{{ user `hcloud_token` }}",
+            "server_type": "cx11",
+            "source_image": "ubuntu-16.04",
+            "image_name": "base-image",
+            "ssh_username": "root"
+        }
+    ],
+    "provisioners": [
+        {
+            "type": "shell",
+            "scripts": [
+                "{{ template_dir }}/../scripts/python.sh",
+                "{{ template_dir }}/../scripts/apt-cleanup.sh"
+            ]
+        }
+    ],
+    "post-processors": [
+        {
+            "type": "manifest",
+            "output": "base-manifest.json",
+            "strip_path": true
+        }
+    ],
+    "variables": {
+        "hcloud_token": null
+    }
+}
