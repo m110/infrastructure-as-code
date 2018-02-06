@@ -1,0 +1,10 @@
+---
+consul:
+  data_dir: /var/lib/consul
+  config_dir: /etc/consul.d
+
+  server: false
+  client: false
+  services: []
+
+  start_service: false

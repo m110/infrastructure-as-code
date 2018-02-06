@@ -1,0 +1,8 @@
+---
+- hosts: "{{ host | default('default') }}"
+  roles:
+    - name: consul
+      consul:
+        server: true
+      tags:
+        - consul

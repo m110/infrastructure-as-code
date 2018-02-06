@@ -1,0 +1,7 @@
+{
+    "service": {
+        "name": "dummy-server",
+        "port": 8080,
+        "tags": ["app"]
+    }
+}

@@ -2,9 +2,23 @@
 - hosts: "{{ host | default('default') }}"
   roles:
     - name: nginx
+      nginx:
+        sites:
+          - load-balancer
       tags:
         - nginx
-  vars:
-    nginx:
-      sites:
-        - load-balancer
+    - name: consul
+      consul:
+        client: true
+        services:
+          - nginx
+      tags:
+        - consul
+    - name: consul-template
+      consul_template:
+        action: nginx -s reload
+        templates:
+          - src: dummy-server-backends.conf
+            dest: /etc/nginx/conf.d/backends
+      tags:
+        - consul-template

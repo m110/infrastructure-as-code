@@ -3,7 +3,7 @@ provider "hcloud" {
 }
 
 resource "hcloud_server" "lbc" {
-  count       = 2
+  count       = 1
   name        = "lbc-${count.index + 1}"
   server_type = "cx11"
   image       = "${var.hcloud_lbc_image}"
@@ -15,6 +15,14 @@ resource "hcloud_server" "node" {
   name        = "node-${count.index + 1}"
   server_type = "cx11"
   image       = "${var.hcloud_node_image}"
+  ssh_keys    = ["${var.hcloud_ssh_key}"]
+}
+
+resource "hcloud_server" "consul" {
+  count       = 1
+  name        = "consul-${count.index + 1}"
+  server_type = "cx11"
+  image       = "${var.hcloud_consul_image}"
   ssh_keys    = ["${var.hcloud_ssh_key}"]
 }
 

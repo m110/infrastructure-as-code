@@ -4,3 +4,10 @@
     - name: dummy-server
       tags:
         - dummy-server
+    - name: consul
+      consul:
+        client: true
+        services:
+          - dummy-server
+      tags:
+        - consul

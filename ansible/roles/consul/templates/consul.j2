@@ -1,0 +1,5 @@
+{% if consul.server %}
+CONSUL_OPTIONS="-data-dir={{ consul.data_dir }} -config-dir={{ consul.config_dir }} -server -bootstrap -ui"
+{% elif consul.client %}
+CONSUL_OPTIONS="-data-dir={{ consul.data_dir }} -config-dir={{ consul.config_dir }}"
+{% endif %}

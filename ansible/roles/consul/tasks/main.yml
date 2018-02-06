@@ -1,0 +1,36 @@
+---
+- name: Install unzip
+  apt: name=unzip update_cache=yes
+
+- name: Download consul
+  unarchive:
+    src: https://releases.hashicorp.com/consul/1.0.3/consul_1.0.3_linux_amd64.zip
+    remote_src: yes
+    dest: /usr/local/bin
+
+- name: Create directories
+  file: path={{ item }} state=directory
+  with_items:
+    - "{{ consul.config_dir }}"
+    - "{{ consul.data_dir }}"
+
+- name: Copy services config
+  copy: src={{ item }}.json dest={{ consul.config_dir }}/{{ item }}.json
+  with_items: "{{ consul.services }}"
+  when: consul.client
+
+- name: Copy systemd template
+  template: src=consul.service.j2 dest=/etc/systemd/system/consul.service
+
+- name: Copy default variables
+  template: src={{ item }}.j2 dest=/etc/default/{{ item }}
+  with_items:
+    - consul
+    - consul-join
+
+- name: Start service
+  service: name=consul state=started
+  when: consul.start_service
+
+- name: Enable service
+  service: name=consul enabled=yes

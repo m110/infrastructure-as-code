@@ -4,18 +4,18 @@
             "type": "hcloud",
             "token": "{{ user `hcloud_token` }}",
             "server_type": "cx11",
-            "image_name": "lbc",
             "source_image": "{{ user `hcloud_base_image` }}",
+            "image_name": "consul",
             "ssh_username": "root"
         }
     ],
     "provisioners": [
         {
             "type": "ansible",
-            "playbook_file": "{{ template_dir }}/../../ansible/load-balancer.yml",
+            "playbook_file": "{{ template_dir }}/../../ansible/consul-server.yml",
             "ansible_env_vars": ["ANSIBLE_CONFIG={{ template_dir }}/../../ansible/ansible.cfg"],
             "extra_arguments": [
-                "--extra-vars", "{'nginx': {'become': false, 'systemd': true}, 'ansible_connection': 'paramiko'}",
+                "--extra-vars", "{'ansible_connection': 'paramiko'}",
                 "--diff"
             ]
         }
@@ -23,7 +23,7 @@
     "post-processors": [
         {
             "type": "manifest",
-            "output": "lbc-manifest.json",
+            "output": "consul-manifest.json",
             "strip_path": true
         }
     ],

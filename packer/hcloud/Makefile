@@ -6,3 +6,6 @@ main:
 
 lbc:
 	@packer build -var-file ../../vars.json lbc.json
+
+consul:
+	@packer build -var-file ../../vars.json consul.json

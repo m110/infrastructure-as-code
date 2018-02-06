@@ -1,0 +1,18 @@
+[Unit]
+Description=Consul template
+Requires=network-online.target
+After=network-online.target
+
+[Service]
+EnvironmentFile=/etc/default/consul-template
+Restart=on-failure
+ExecStart=/usr/local/bin/consul-template \
+{% for template in consul_template.templates %}
+    -template="{{ consul_template.dir }}/{{ template.src }}:{{ template.dest }}:{{ consul_template.action }}" \
+{% endfor %}
+    $CONSUL_TEMPLATE_OPTIONS
+
+KillSignal=SIGINT
+
+[Install]
+WantedBy=multi-user.target

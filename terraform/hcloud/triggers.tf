@@ -27,31 +27,93 @@ resource "null_resource" "lbc_floating_ip" {
   }
 }
 
-resource "null_resource" "backends" {
+resource "null_resource" "node-consul" {
+  count = "${hcloud_server.node.count}"
+
+  triggers {
+    node_ips = "${join(",", hcloud_server.node.*.ipv4_address)}"
+  }
+
+  provisioner "local-exec" {
+    command = "ssh-keyscan ${element(hcloud_server.node.*.ipv4_address, count.index)} >> ~/.ssh/known_hosts"
+  }
+
+  connection {
+    user = "root"
+    host = "${element(hcloud_server.node.*.ipv4_address, count.index)}"
+  }
+
+  provisioner "file" {
+    content     = "CONSUL_JOIN=\"-client ${element(hcloud_server.node.*.ipv4_address, count.index)} -bind ${element(hcloud_server.node.*.ipv4_address, count.index)} -join ${hcloud_server.consul.0.ipv4_address}\""
+    destination = "/etc/default/consul-join"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "systemctl restart consul",
+    ]
+  }
+}
+
+resource "null_resource" "lbc-consul" {
   count = "${hcloud_server.lbc.count}"
 
   triggers {
-    backends_ips  = "${join(",", hcloud_server.node.*.ipv4_address)}"
-    lbc_addresses = "${join(", ", hcloud_server.lbc.*.ipv4_address)}"
+    lbc_ips = "${join(",", hcloud_server.lbc.*.ipv4_address)}"
   }
 
   provisioner "local-exec" {
     command = "ssh-keyscan ${element(hcloud_server.lbc.*.ipv4_address, count.index)} >> ~/.ssh/known_hosts"
   }
 
-  provisioner "local-exec" {
-    command = "ANSIBLE_CONFIG=../../ansible/ansible.cfg ansible-playbook ../../ansible/load-balancer.yml -t nginx-config-backends -D -e '${element(data.template_file.ansible_vars.*.rendered, count.index)}' -i ${element(hcloud_server.lbc.*.ipv4_address, count.index)},"
+  connection {
+    user = "root"
+    host = "${element(hcloud_server.lbc.*.ipv4_address, count.index)}"
+  }
+
+  provisioner "file" {
+    content     = "CONSUL_JOIN=\"-client ${element(hcloud_server.lbc.*.ipv4_address, count.index)} -bind ${element(hcloud_server.lbc.*.ipv4_address, count.index)} -join ${hcloud_server.consul.0.ipv4_address}\""
+    destination = "/etc/default/consul-join"
+  }
+
+  provisioner "file" {
+    content     = "CONSUL_TEMPLATE_OPTIONS=\"-consul-addr ${element(hcloud_server.lbc.*.ipv4_address, count.index)}:8500\""
+    destination = "/etc/default/consul-template"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "systemctl restart consul",
+      "systemctl restart consul-template",
+    ]
   }
 }
 
-data "template_file" "ansible_vars" {
-  count = "${hcloud_server.lbc.count}"
+resource "null_resource" "consul-bind" {
+  count = "${hcloud_server.consul.count}"
 
-  template = "${file("ansible.tpl")}"
+  triggers {
+    consul_ips = "${join(",", hcloud_server.consul.*.ipv4_address)}"
+  }
 
-  vars = {
-    backends = "${join(", ", formatlist("\"%s:${var.dummy_server_port}\"", hcloud_server.node.*.ipv4_address))}"
-    host     = "${element(hcloud_server.lbc.*.ipv4_address, count.index)}"
+  provisioner "local-exec" {
+    command = "ssh-keyscan ${element(hcloud_server.consul.*.ipv4_address, count.index)} >> ~/.ssh/known_hosts"
+  }
+
+  connection {
+    user = "root"
+    host = "${element(hcloud_server.consul.*.ipv4_address, count.index)}"
+  }
+
+  provisioner "file" {
+    content     = "CONSUL_JOIN=\"-bind ${element(hcloud_server.consul.*.ipv4_address, count.index)}\""
+    destination = "/etc/default/consul-join"
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "systemctl restart consul",
+    ]
   }
 }
 
